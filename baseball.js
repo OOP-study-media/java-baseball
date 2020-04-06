@@ -57,6 +57,8 @@ form.addEventListener('submit', (e) => {
   } else if (answer === arr.join('')) {
     result = document.createElement('div')
     body.append(result)
+    description.textContent = `숫자를 입력해주세요: ${answer}`
+    body.append(result)
     result.textContent = `3개의 숫자를 모두 맞히셨습니다! 게임종료 종료하려면 2를 입력하세요.`
     makeDescription()
     input.value = ''
