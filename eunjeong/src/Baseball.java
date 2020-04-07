@@ -5,30 +5,31 @@ import java.util.*;
 public class Baseball {
     private static final int RANGE = 9;
     private static final int SELECT = 3;
+    private static final int CONTINUE = 1;
+    private static int strike = 0;
+    private static int ball = 0;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String answer = selectNumber();
         String input;
-        int[] result;
-        int game = 1;
+        int game = CONTINUE;
 
-        while (game == 1) {
+        while (game == CONTINUE) {
             System.out.println("숫자를 입력해주세요 : ");
             input = br.readLine();
 
             if (!check(input)) {
-                System.out.println("다시 입력해주세요 (중복/0포함)");
+                System.out.println("다시 입력해주세요 (중복/0포함/3자리X)");
                 continue;
             }
 
-            result = calculateScore(answer, input);
-            System.out.println(print(result[0], result[1]));
+            calculateScore(answer, input);
+            System.out.println(print());
 
-            if (result[0] == SELECT) {
+            if (strike == SELECT) {
                 System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임종료");
                 System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요");
-
                 game = Integer.parseInt(br.readLine());
                 answer = selectNumber();
             }
@@ -38,15 +39,10 @@ public class Baseball {
     private static boolean check(String input) {
         Set<Character> set = new HashSet<>();
 
-        for (int i = 0; i < SELECT; i++) {
+        for (int i = 0; i < input.length(); i++) {
             set.add(input.charAt(i));
         }
-
-        if (set.size() != 3) {
-            return false;
-        } else {
-            return !set.contains('0');
-        }
+        return (set.size() == SELECT) && !set.contains('0');
     }
 
     private static String selectNumber() {
@@ -61,13 +57,12 @@ public class Baseball {
         for (int i : set) {
             number.append(i);
         }
-
         return number.toString();
     }
 
-    private static int[] calculateScore(String answer, String input) {
-        int strike = 0;
-        int ball = 0;
+    private static void calculateScore(String answer, String input) {
+        strike = 0;
+        ball = 0;
 
         for (int i = 0; i < SELECT; i++) {
             if (answer.charAt(i) == input.charAt(i)) {
@@ -76,21 +71,21 @@ public class Baseball {
                 ball++;
             }
         }
-
-        return new int[]{strike, ball};
     }
 
-    private static String print(int strike, int ball) {
+    private static String print() {
         StringBuilder answer = new StringBuilder();
 
-        if (strike != 0) {
-            answer.append(strike).append(" 스트라이크 ");
-        }
+        appendString(answer, strike, "스트라이크 ");
+        appendString(answer, ball, "볼 ");
 
-        if (ball != 0) {
-            answer.append(ball).append(" 볼 ");
-        }
-
-        return answer.toString();
+        return (answer.length() != 0) ? answer.toString() : "X";
     }
+
+    private static void appendString(StringBuilder stringBuilder, int value, String string) {
+        if (value != 0) {
+            stringBuilder.append(value).append(string);
+        }
+    }
+
 }
