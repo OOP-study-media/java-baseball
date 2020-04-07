@@ -1,26 +1,28 @@
 const { body } = document
-let arr = []
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const BASEBALL_NUMBER_LENGTH = 3
+
+let answerNums = []
 let result = null
 let description = null
-let answer = 0
+let myNum = 0
 
 const chooseNumber = () => {
-  var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  arr = []
+  answerNums = []
   for (let i = 0; i < 3; i++) {
     const randomNumber = Math.floor(Math.random() * (9 - i))
     const chosen = numbers.splice(randomNumber, 1)[0]
-    arr.push(chosen)
+    answerNums.push(chosen)
   }
 }
 
-const compareTwoArray = (answer) => {
+const compareNumbers = (myNum) => {
   let strike = 0
   let ball = 0
-  for (let i = 0; i < 4; i++) {
-    if (Number(answer[i]) === arr[i]) {
+  for (let i = 0; i < BASEBALL_NUMBER_LENGTH; i++) {
+    if (Number(myNum[i]) === answerNums[i]) {
       strike += 1
-    } else if (arr.indexOf(Number(answer[i])) > -1) {
+    } else if (answerNums.indexOf(Number(myNum[i])) > -1) {
       ball += 1
     }
   }
@@ -38,7 +40,7 @@ body.append(form)
 
 const input = document.createElement('input')
 input.type = 'text'
-input.maxLength = 4
+input.maxLength = BASEBALL_NUMBER_LENGTH
 form.append(input)
 
 const button = document.createElement('button')
@@ -47,17 +49,17 @@ form.append(button)
 
 chooseNumber()
 makeDescription()
-console.log(arr)
+console.log(answerNums)
 
 form.addEventListener('submit', (e) => {
   e.preventDefault()
-  answer = input.value
-  if (answer === '2') {
+  myNum = input.value
+  if (myNum === '2') {
     body.style.display = 'none'
-  } else if (answer === arr.join('')) {
+  } else if (myNum === answerNums.join('')) {
     result = document.createElement('div')
     body.append(result)
-    description.textContent = `숫자를 입력해주세요: ${answer}`
+    description.textContent = `숫자를 입력해주세요: ${myNum}`
     body.append(result)
     result.textContent = `3개의 숫자를 모두 맞히셨습니다! 게임종료 종료하려면 2를 입력하세요.`
     makeDescription()
@@ -65,10 +67,9 @@ form.addEventListener('submit', (e) => {
     input.focus()
     chooseNumber()
   } else {
-    const answerArray = answer.split('')
-    let [strike, ball] = compareTwoArray(answerArray)
+    let [strike, ball] = compareNums(myNum.split(''))
     result = document.createElement('div')
-    description.textContent = `숫자를 입력해주세요: ${answer}`
+    description.textContent = `숫자를 입력해주세요: ${myNum}`
     body.append(result)
     makeDescription()
     strike === 0 && ball === 0
