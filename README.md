@@ -10,7 +10,7 @@ https://taenykim.github.io/java-baseball/
 
 스트라이크, 볼 구하기 `compareNumbers`
 
-## 메모
+# 🖌 memo
 
 ### 1. 매직넘버 -> 상수
 
