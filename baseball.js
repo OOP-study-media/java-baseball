@@ -2,17 +2,19 @@ const { body } = document
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const BASEBALL_NUMBER_LENGTH = 3
 
-let answerNums = []
+let answerNum = ''
+let myNum = ''
+// htmlDivElement
 let result = null
+// htmlSpanElement
 let description = null
-let myNum = 0
 
 const chooseNumber = () => {
-  answerNums = []
-  for (let i = 0; i < 3; i++) {
+  answerNum = ''
+  for (let i = 0; i < BASEBALL_NUMBER_LENGTH; i++) {
     const randomNumber = Math.floor(Math.random() * (9 - i))
     const chosen = numbers.splice(randomNumber, 1)[0]
-    answerNums.push(chosen)
+    answerNum += chosen
   }
 }
 
@@ -20,9 +22,9 @@ const compareNumbers = (myNum) => {
   let strike = 0
   let ball = 0
   for (let i = 0; i < BASEBALL_NUMBER_LENGTH; i++) {
-    if (Number(myNum[i]) === answerNums[i]) {
+    if (myNum[i] === answerNum[i]) {
       strike += 1
-    } else if (answerNums.indexOf(Number(myNum[i])) > -1) {
+    } else if (answerNum.indexOf(Number(myNum[i])) > -1) {
       ball += 1
     }
   }
@@ -49,14 +51,14 @@ form.append(button)
 
 chooseNumber()
 makeDescription()
-console.log(answerNums)
+console.log(answerNum)
 
 form.addEventListener('submit', (e) => {
   e.preventDefault()
   myNum = input.value
   if (myNum === '2') {
     body.style.display = 'none'
-  } else if (myNum === answerNums.join('')) {
+  } else if (myNum === answerNum) {
     result = document.createElement('div')
     body.append(result)
     description.textContent = `숫자를 입력해주세요: ${myNum}`
@@ -67,7 +69,7 @@ form.addEventListener('submit', (e) => {
     input.focus()
     chooseNumber()
   } else {
-    let [strike, ball] = compareNums(myNum.split(''))
+    let [strike, ball] = compareNumbers(myNum)
     result = document.createElement('div')
     description.textContent = `숫자를 입력해주세요: ${myNum}`
     body.append(result)
