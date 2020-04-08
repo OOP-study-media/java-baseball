@@ -4,8 +4,10 @@ import java.util.*;
 
 public class Baseball {
     private static final int RANGE = 9;
-    private static final int SELECT = 3;
-    private static final int CONTINUE = 1;
+    private static final int SELECT_NUMBER_LENGTH = 3;
+    private static final int CONTINUE = 0;
+    private static final int RESET = 1;
+    private static final int BREAK = 2;
     private static int strike = 0;
     private static int ball = 0;
 
@@ -15,7 +17,10 @@ public class Baseball {
         String input;
         int game = CONTINUE;
 
-        while (game == CONTINUE) {
+        while (game != BREAK) {
+            if (game == RESET) {
+                answer = selectNumber();
+            }
             System.out.println("숫자를 입력해주세요 : ");
             input = br.readLine();
 
@@ -25,46 +30,45 @@ public class Baseball {
             }
 
             calculateScore(answer, input);
-            System.out.println(print());
+            System.out.println(makeAnswer());
 
-            if (strike == SELECT) {
+            if (strike == SELECT_NUMBER_LENGTH) {
                 System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임종료");
                 System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요");
                 game = Integer.parseInt(br.readLine());
-                answer = selectNumber();
             }
         }
     }
 
     private static boolean check(String input) {
-        Set<Character> set = new HashSet<>();
+        Set<Character> numbers = new HashSet<>();
 
         for (int i = 0; i < input.length(); i++) {
-            set.add(input.charAt(i));
+            numbers.add(input.charAt(i));
         }
-        return (set.size() == SELECT) && !set.contains('0');
+        return (numbers.size() == SELECT_NUMBER_LENGTH) && !numbers.contains('0');
     }
 
     private static String selectNumber() {
         Random random = new Random();
-        Set<Integer> set = new LinkedHashSet<>();
-        StringBuilder number = new StringBuilder();
+        Set<Integer> numbers = new HashSet<>();
+        StringBuilder randomNumber = new StringBuilder();
 
-        while (set.size() < SELECT) {
-            set.add(random.nextInt(RANGE) + 1);
+        while (numbers.size() < SELECT_NUMBER_LENGTH) {
+            numbers.add(random.nextInt(RANGE) + 1);
         }
 
-        for (int i : set) {
-            number.append(i);
+        for (int number : numbers) {
+            randomNumber.append(number);
         }
-        return number.toString();
+        return randomNumber.toString();
     }
 
     private static void calculateScore(String answer, String input) {
         strike = 0;
         ball = 0;
 
-        for (int i = 0; i < SELECT; i++) {
+        for (int i = 0; i < SELECT_NUMBER_LENGTH; i++) {
             if (answer.charAt(i) == input.charAt(i)) {
                 strike++;
             } else if (answer.contains(String.valueOf(input.charAt(i)))) {
@@ -73,7 +77,7 @@ public class Baseball {
         }
     }
 
-    private static String print() {
+    private static String makeAnswer() {
         StringBuilder answer = new StringBuilder();
 
         appendString(answer, strike, "스트라이크 ");
