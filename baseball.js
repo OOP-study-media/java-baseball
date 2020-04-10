@@ -1,6 +1,7 @@
 const { body } = document
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 const BASEBALL_NUMBER_LENGTH = 3
+const REPLAY = '2'
 
 let answerNum = ''
 let myNum = ''
@@ -56,7 +57,7 @@ console.log(answerNum)
 form.addEventListener('submit', (e) => {
   e.preventDefault()
   myNum = input.value
-  if (myNum === '2') {
+  if (myNum === REPLAY) {
     body.style.display = 'none'
   } else if (myNum === answerNum) {
     result = document.createElement('div')
